@@ -1,0 +1,200 @@
+1)Зарегистрируйтесь на сайте github.com, если еще не сделали этого ранее
+был зарегистрирован ранее
+
+2)Установите параметры git в соответствии с вашими учетными данными:
+root@eltex-practice2-pg2-v15:~# git config --global user.name "MrTapocheck"
+root@eltex-practice2-pg2-v15:~# git config --global user.email "betmen201446@gmail.com"
+root@eltex-practice2-pg2-v15:~# git config --global init.defaultBranch main
+
+3)Установите непосредственно программу git и набор утилит для управления github из командной строки gh:
+apt update
+apt install git gh
+
+4)Создайте ключ ssh:
+root@eltex-practice2-pg2-v15:~# ssh-keygen -t ed25519 -f ~/.ssh/NameMyGitKey
+
+5)Подключите этот комьютер к github:
+root@eltex-practice2-pg2-v15:~# gh auth login
+? What account do you want to log into? GitHub.com
+? What is your preferred protocol for Git operations on this host? SSH
+? Upload your SSH public key to your GitHub account? /root/.ssh/NameMyGitKey.pub
+? Title for your SSH key: eltex-practice2-pg2-v15
+? How would you like to authenticate GitHub CLI? Login with a web browser
+
+! First copy your one-time code: B561-ED01
+Press Enter to open github.com in your browser...
+! Failed opening a web browser at https://github.com/login/device
+  exec: "xdg-open,x-www-browser,www-browser,wslview": executable file not found in $PATH
+  Please try entering the URL in your browser manually
+✓ Authentication complete.
+- gh config set -h github.com git_protocol ssh
+✓ Configured git protocol
+! Authentication credentials saved in plain text
+✓ Uploaded the SSH key to your GitHub account: /root/.ssh/NameMyGitKey.pub
+✓ Logged in as MrTapocheck
+root@eltex-practice2-pg2-v15:~#
+
+6)Укажите автоматическую авторизацию только для сайта github.com:
+gh auth setup-git --hostname github.com
+
+7)Убедиться, что все в порядке можно командой: gh auth status
+root@eltex-practice2-pg2-v15:~# gh auth status
+github.com
+  ✓ Logged in to github.com account MrTapocheck (/root/.config/gh/hosts.yml)
+  - Active account: true
+  - Git operations protocol: ssh
+  - Token: gho_************************************
+  - Token scopes: 'admin:public_key', 'gist', 'read:org', 'repo'
+root@eltex-practice2-pg2-v15:~#
+
+8)Создайте репозиторий на сервере github:
+root@eltex-practice2-pg2-v15:~# gh repo create --public Eltex
+✓ Created repository MrTapocheck/Eltex on GitHub
+  https://github.com/MrTapocheck/Eltex
+root@eltex-practice2-pg2-v15:~#
+
+9)Пора наполнить его:
+root@eltex-practice2-pg2-v15:~# mkdir ~/Eltex && cd ~/Eltex
+root@eltex-practice2-pg2-v15:~/Eltex# echo "# репозиторий с работами осеней школы Eltex 2025" >> README.md
+root@eltex-practice2-pg2-v15:~/Eltex# git init
+Initialized empty Git repository in /root/Eltex/.git/
+root@eltex-practice2-pg2-v15:~/Eltex# git add README.md
+root@eltex-practice2-pg2-v15:~/Eltex# git commit -m "first commit"
+[main (root-commit) b60a1c3] first commit
+ 1 file changed, 1 insertion(+)
+ create mode 100644 README.md
+root@eltex-practice2-pg2-v15:~/Eltex# git branch -M main
+root@eltex-practice2-pg2-v15:~/Eltex# git remote add origin https://github.com/MrTapocheck/Eltex.git
+root@eltex-practice2-pg2-v15:~/Eltex# git status
+On branch main
+nothing to commit, working tree clean
+root@eltex-practice2-pg2-v15:~/Eltex# git push -u origin main
+
+Enumerating objects: 3, done.
+Counting objects: 100% (3/3), done.
+Delta compression using up to 2 threads
+Compressing objects: 100% (2/2), done.
+Writing objects: 100% (3/3), 288 bytes | 288.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0
+To https://github.com/MrTapocheck/Eltex.git
+ * [new branch]      main -> main
+branch 'main' set up to track 'origin/main'.
+root@eltex-practice2-pg2-v15:~# mkdir -p module1/task1
+root@eltex-practice2-pg2-v15:~# mkdir module1/task2
+root@eltex-practice2-pg2-v15:~# mkdir module1/task3
+
+(скопируйте с сервера для 1 практики отчеты в каталоги task* используя команду scp)
+eltex-pg2-v15@eltex-2025-autumn:~$ scp report_part1.txt root@172.16.9.215:~/Eltex/module1/task1/
+report_part1.txt                                                                                                                      100%  141   395.1KB/s   00:00
+eltex-pg2-v15@eltex-2025-autumn:~$ scp eltex-pg2-v15_part.log root@172.16.9.215:~/Eltex/module1/task2/
+eltex-pg2-v15_part.log                                                                                                                100%   43KB  41.3MB/s   00:00
+eltex-pg2-v15@eltex-2025-autumn:~$ scp eltex-pg2-v15_part3.log root@172.16.9.215:~/Eltex/module1/task3/
+eltex-pg2-v15_part3.log                                                                                                               100%  698     2.2MB/s   00:00
+
+root@eltex-practice2-pg2-v15:~/Eltex/module1# git add .
+root@eltex-practice2-pg2-v15:~/Eltex/module1# git status
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        new file:   task1/report_part1.txt
+        new file:   task2/eltex-pg2-v15_part.log
+        new file:   task3/eltex-pg2-v15_part3.log
+
+root@eltex-practice2-pg2-v15:~/Eltex/module1#
+
+git commit
+root@eltex-practice2-pg2-v15:~/Eltex/module1# git commit
+[main 9bbdcec] Добавил отчёты с первой практики
+ 3 files changed, 788 insertions(+)
+ create mode 100644 module1/task1/report_part1.txt
+ create mode 100644 module1/task2/eltex-pg2-v15_part.log
+ create mode 100644 module1/task3/eltex-pg2-v15_part3.log
+root@eltex-practice2-pg2-v15:~/Eltex/module1#
+
+root@eltex-practice2-pg2-v15:~/Eltex/module1# git push
+Enumerating objects: 10, done.
+Counting objects: 100% (10/10), done.
+Delta compression using up to 2 threads
+Compressing objects: 100% (8/8), done.
+Writing objects: 100% (9/9), 9.44 KiB | 9.44 MiB/s, done.
+Total 9 (delta 0), reused 0 (delta 0), pack-reused 0
+To https://github.com/MrTapocheck/Eltex.git
+   b60a1c3..9bbdcec  main -> main
+
+
+10) Клонируйте ваш репозиторий:
+root@eltex-practice2-pg2-v15:~# mkdir ~/Eltex_clone && cd ~/Eltex_clone
+
+root@eltex-practice2-pg2-v15:~/Eltex_clone# git clone https://github.com/MrTapocheck/Eltex.git
+Cloning into 'Eltex'...
+remote: Enumerating objects: 17, done.
+remote: Counting objects: 100% (17/17), done.
+remote: Compressing objects: 100% (15/15), done.
+remote: Total 17 (delta 0), reused 17 (delta 0), pack-reused 0 (from 0)
+Receiving objects: 100% (17/17), 766.07 KiB | 1.69 MiB/s, done.
+root@eltex-practice2-pg2-v15:~/Eltex_clone#
+
+11)Внесите изменение в основном каталоге, не забыв про git add/commit/push, выполните в
+каталоге с клоном:
+
+root@eltex-practice2-pg2-v15:~/Eltex/module1/task1# nano report_part1.txt   //изменил вторую строчку
+
+root@eltex-practice2-pg2-v15:~/Eltex_clone/Eltex# git fetch
+remote: Enumerating objects: 9, done.
+remote: Counting objects: 100% (9/9), done.
+remote: Compressing objects: 100% (5/5), done.
+remote: Total 5 (delta 0), reused 5 (delta 0), pack-reused 0 (from 0)
+Unpacking objects: 100% (5/5), 683 bytes | 683.00 KiB/s, done.
+From https://github.com/MrTapocheck/Eltex
+   f083a87..2f7d6e5  main       -> origin/main
+root@eltex-practice2-pg2-v15:~/Eltex_clone/Eltex# git log origin/main
+commit 2f7d6e54438112a12af5c1c34d8fcc312d358a06 (origin/main, origin/HEAD)
+Author: MrTapocheck <betmen201446@gmail.com>
+Date:   Mon Nov 10 09:50:24 2025 +0000
+
+    внёс изменение в одну строчку в первом файле
+
+commit f083a87b84e7f0315dd7c0f0ebffbee277a4858f (HEAD -> main)
+Author: MrTapocheck <betmen201446@gmail.com>
+Date:   Mon Nov 10 09:33:08 2025 +0000
+
+    добавил пдф с первого раздела
+
+commit 9bbdcecc2dd3f9a3bf3b2c4ed8d17d41ea318894
+Author: MrTapocheck <betmen201446@gmail.com>
+Date:   Mon Nov 10 00:41:01 2025 +0000
+
+    Добавил отчёты с первой практики
+
+commit b60a1c33d010c24aa65f0ac09821d0b5ee06a789
+Author: MrTapocheck <betmen201446@gmail.com>
+Date:   Sun Nov 9 23:58:44 2025 +0000
+
+    first commit
+root@eltex-practice2-pg2-v15:~/Eltex_clone/Eltex# git diff main origin/main
+diff --git a/module1/task1/report_part1.txt b/module1/task1/report_part1.txt
+index c430117..de0b493 100644
+--- a/module1/task1/report_part1.txt
++++ b/module1/task1/report_part1.txt
+@@ -1 +1,2 @@
+ Тривайлов Виталий Александрович часть 1 модуля 1 успешно завершена 09.10.2025 18:30
++Изменённая строка для третьего раздела второй практики(пункт10)
+root@eltex-practice2-pg2-v15:~/Eltex_clone/Eltex# git merge
+Updating f083a87..2f7d6e5
+Fast-forward
+ module1/task1/report_part1.txt | 1 +
+ 1 file changed, 1 insertion(+)
+root@eltex-practice2-pg2-v15:~/Eltex_clone/Eltex#
+
+12) Повторите п.9 начиная с создания каталогов для отчета по второй практике
+eltex-pg2-v15@eltex-2025-autumn:~$ scp practice2-eltex-pg2-v15_part1.log  root@172.16.9.215:~/Eltex/module1/task2/
+practice2-eltex-pg2-v15_part1.log                                                                                                     100%   13KB  17.6MB/s   00:00
+eltex-pg2-v15@eltex-2025-autumn:~$ scp practice2-eltex-pg2-v15_part2.log  root@172.16.9.215:~/Eltex/module1/task2/
+practice2-eltex-pg2-v15_part2.log                                                                                                     100% 6390    12.7MB/s   00:00
+eltex-pg2-v15@eltex-2025-autumn:~$ scp practice2-eltex-pg2-v15_part3.log  root@172.16.9.215:~/Eltex/module1/task2/
+practice2-eltex-pg2-v15_part3.log
+
+
+13) отправил

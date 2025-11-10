@@ -1,0 +1,240 @@
+eltex-pg2-v15@eltex-2025-autumn:~$ touch practice2_${USER}_part1.log
+
+1)Создайте на сервере для 1 практики ключ ssh при помощи программы ssh-keygen
+2)Скопируйте созданный ключ на сервер для 2 практики для пользователя root при помощи
+программы ssh-copy-id
+3)Подключитесь к серверу для 2 практики под пользователем root и сравните содержимое файла
+открытого ключа на сервере 1 ~/.ssh/*.pub и файла ~/.ssh/authorized_keys на сервере для 2
+практики, а так же права доступа для каждого из файлов
+
+
+файл ~/.ssh/authorized_keys на сервере для 2
+
+содержимое
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDUn+YCuJMfIuyKkTSEQ+fncKEkJ8RTTpDWYf+UA3LCkHxPa+87undSsgGXmGPfhwz/xolTS6ru3GYpIIsm3iikJBW1nUZpPZZoSzT+D142Ka0ft/voba4wTTaKsCV/3RzdTXXKqMTwRk5dgvOJB36xAQdsiU3DkthXsCM/k+tpTm9So4y9GDFtlDBAT6Af8sMczUDNfsO67UwMRIHrc1/BmhqY/aCQEUMKHv6rsOWGLgwDMhyoBbXWPR5HO1n9yrxGdc0UAyfzLGFmhNOADWp+PPFu0VcAMxDXZ0m72c1M7tYUEeWeYW2UavCxwhjV/EkkRaSIcnkn9csb65TIhDghZTAtKCNKtEiaRpDVWs76J2QQpaLaskDeqWg5y6imsNIWs7BPeuxG+mHaKQh5Elpqk5OCiQDjIkPZjrrlv8G8ZPUc5StIu0EZ0JPSVrwn6Am9Mc5qsfT4t4WN8k5fvohPpIanS3oMl2cTrHSbt7t9or8KRSSucv5R25Jr52jqIas= eltex-pg2-v15@eltex-2025-autumn
+
+root@eltex-practice2-pg2-v15:~# ls -l ~/.ssh/authorized_keys
+-rw------- 1 root root 585 Oct 15 11:05 /root/.ssh/authorized_keys
+root@eltex-practice2-pg2-v15:~#
+
+
+
+содержимое файла открытого ключа на сервере 1 ~/.ssh/*.pub
+
+eltex-pg2-v15@eltex-2025-autumn:~$ ls -l ~/.ssh/*.pub
+-rw-r--r-- 1 eltex-pg2-v15 eltex-pg2-v15 585 Oct 15 17:18 /home/eltex-pg2-v15/.ssh/id_rsa.pub
+
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDUn+YCuJMfIuyKkTSEQ+fncKEkJ8RTTpDWYf+UA3LCkHxPa+87undSsgGXmGPfhwz/xolTS6ru3GYpIIsm3iikJBW1nUZpPZZoSzT+D142Ka0ft/voba4wTTaKsCV/3RzdTXXKqMTwRk5dgvOJB36xAQdsiU3DkthXsCM/k+tpTm9So4y9GDFtlDBAT6Af8sMczUDNfsO67UwMRIHrc1/BmhqY/aCQEUMKHv6rsOWGLgwDMhyoBbXWPR5HO1n9yrxGdc0UAyfzLGFmhNOADWp+PPFu0VcAMxDXZ0m72c1M7tYUEeWeYW2UavCxwhjV/EkkRaSIcnkn9csb65TIhDghZTAtKCNKtEiaRpDVWs76J2QQpaLaskDeqWg5y6imsNIWs7BPeuxG+mHaKQh5Elpqk5OCiQDjIkPZjrrlv8G8ZPUc5StIu0EZ0JPSVrwn6Am9Mc5qsfT4t4WN8k5fvohPpIanS3oMl2cTrHSbt7t9or8KRSSucv5R25Jr52jqIas= eltex-pg2-v15@eltex-2025-autumn
+
+итог сравнения - содержимое файлов одинаковое
+но судя по правам доступа читать ключ на сервере 2 может только владелец, когда ключ на сервере 1 могут читать все
+
+4)Создайте пользователя user1 при помощи команды useradd, укажите необходимость создания
+домашнего каталога и shell /bin/bash. Создайте пароль пользователю user1
+
+root@eltex-practice2-pg2-v15:~# sudo useradd -m -s /bin/bash user1
+
+5) Создайте пользователя user2 и user3 при помощи команды adduser
+root@eltex-practice2-pg2-v15:~# adduser user2
+info: Adding user `user2' ...
+info: Selecting UID/GID from range 1000 to 59999 ...
+info: Adding new group `user2' (1002) ...
+info: Adding new user `user2' (1002) with group `user2 (1002)' ...
+info: Creating home directory `/home/user2' ...
+info: Copying files from `/etc/skel' ...
+New password:
+Retype new password:
+passwd: password updated successfully
+Changing the user information for user2
+Enter the new value, or press ENTER for the default
+        Full Name []:
+        Room Number []:
+        Work Phone []:
+        Home Phone []:
+        Other []:
+
+Is the information correct? [Y/n] info: Adding new user `user2' to supplemental / extra groups `users' ...
+info: Adding user `user2' to group `users' ...
+
+root@eltex-practice2-pg2-v15:~#
+
+root@eltex-practice2-pg2-v15:~# adduser user3
+info: Adding user `user3' ...
+info: Selecting UID/GID from range 1000 to 59999 ...
+info: Adding new group `user3' (1003) ...
+info: Adding new user `user3' (1003) with group `user3 (1003)' ...
+info: Creating home directory `/home/user3' ...
+info: Copying files from `/etc/skel' ...
+New password:
+Retype new password:
+No password has been supplied.
+New password:
+Retype new password:
+No password has been supplied.
+New password:
+Retype new password:
+No password has been supplied.
+passwd: Authentication token manipulation error
+passwd: password unchanged
+Try again? [y/N] y
+New password:
+Retype new password:
+passwd: password updated successfully
+Changing the user information for user3
+Enter the new value, or press ENTER for the default
+        Full Name []:
+        Room Number []:
+        Work Phone []:
+        Home Phone []:
+        Other []:
+
+Is the information correct? [Y/n] info: Adding new user `user3' to supplemental / extra groups `users' ...
+info: Adding user `user3' to group `users' ...
+
+root@eltex-practice2-pg2-v15:~#
+
+6)Для пользователя user3 смените shell на /usr/sbin/nologin (man usermod), выполните вход под
+этим пользователем при помощи утилиты su, сначала без дополнительных параметров, затем с
+явным указанием shell /bin/bash в параметрах su. Выполните logout
+
+root@eltex-practice2-pg2-v15:~# sudo usermod -s /usr/sbin/nologin user3
+root@eltex-practice2-pg2-v15:~# su user3
+This account is currently not available.
+root@eltex-practice2-pg2-v15:~#
+
+root@eltex-practice2-pg2-v15:~# su user3 -s /bin/bash
+user3@eltex-practice2-pg2-v15:/root$ logout
+bash: logout: not login shell: use `exit'
+user3@eltex-practice2-pg2-v15:/root$ exit
+exit
+root@eltex-practice2-pg2-v15:~#
+
+7)Создайте новую группу и добавьте её для всех пользователей user* как дополнительную,
+посмотрите список групп всех пользователей user*
+
+root@eltex-practice2-pg2-v15:~# groupadd user_group
+root@eltex-practice2-pg2-v15:~# usermod -aG user_group user1
+root@eltex-practice2-pg2-v15:~# usermod -aG user_group user2
+root@eltex-practice2-pg2-v15:~# usermod -aG user_group user3
+root@eltex-practice2-pg2-v15:~# groups user1
+user1 : user1 user_group
+root@eltex-practice2-pg2-v15:~# groups user2
+user2 : user2 users user_group
+root@eltex-practice2-pg2-v15:~# groups user3
+user3 : user3 users user_group
+root@eltex-practice2-pg2-v15:~#
+
+8)
+9)Создайте каталог /opt/share и назначьте группу из предыдущего пункта его владельцем,
+установите на этот каталог бит SGID, права для группы rwx.
+
+root@eltex-practice2-pg2-v15:~# mkdir -p /opt/share
+root@eltex-practice2-pg2-v15:~# chown :user_group /opt/share
+root@eltex-practice2-pg2-v15:~# chmod 2770 /opt/share
+
+10)Для user1 задайте перманентно umask, снимающий право чтения для «прочих»
+root@eltex-practice2-pg2-v15:~# umask 006 >> /home/user1/.bashrc
+
+11)Создайте каждым из пользователей новые файлы в каталоге /opt/share, удалите файлы
+созданные другими пользователями
+
+root@eltex-practice2-pg2-v15:~# sudo -u user1 touch /opt/share/file_user1
+root@eltex-practice2-pg2-v15:~# sudo -u user2 touch /opt/share/file_user2
+root@eltex-practice2-pg2-v15:~# sudo -u user3 touch /opt/share/file_user3
+root@eltex-practice2-pg2-v15:~# ls -la /opt/share/
+total 8
+drwxrws--- 2 root  user_group 4096 Oct 27 05:13 .
+drwxr-xr-x 3 root  root       4096 Oct 26 21:25 ..
+-rw-rw-r-- 1 user1 user_group    0 Oct 27 05:12 file_user1
+-rw-rw-r-- 1 user2 user_group    0 Oct 27 05:13 file_user2
+-rw-rw-r-- 1 user3 user_group    0 Oct 27 05:13 file_user3
+root@eltex-practice2-pg2-v15:~# sudo -u user1 rm -f /opt/share/file_user2
+root@eltex-practice2-pg2-v15:~# sudo -u user2 rm -f /opt/share/file_user3
+root@eltex-practice2-pg2-v15:~# sudo -u user3 rm -f /opt/share/file_user1
+
+12)Повторите предыдущий пункт, предварительно установив sticky bit на каталоге /opt/share
+root@eltex-practice2-pg2-v15:~# sudo chmod +t /opt/share
+root@eltex-practice2-pg2-v15:~# sudo -u user1 touch /opt/share/file_user1
+sudo -u user2 touch /opt/share/file_user2
+sudo -u user3 touch /opt/share/file_user3
+root@eltex-practice2-pg2-v15:~# ls -la /opt/share/
+total 8
+drwxrws--T 2 root  user_group 4096 Oct 27 05:24 .
+drwxr-xr-x 3 root  root       4096 Oct 26 21:25 ..
+-rw-rw-r-- 1 user1 user_group    0 Oct 27 05:24 file_user1
+-rw-rw-r-- 1 user2 user_group    0 Oct 27 05:24 file_user2
+-rw-rw-r-- 1 user3 user_group    0 Oct 27 05:24 file_user3
+root@eltex-practice2-pg2-v15:~# sudo -u user1 rm -f /opt/share/file_user2
+rm: cannot remove '/opt/share/file_user2': Operation not permitted
+root@eltex-practice2-pg2-v15:~# ls -la /opt/share/
+total 8
+drwxrws--T 2 root  user_group 4096 Oct 27 05:24 .
+drwxr-xr-x 3 root  root       4096 Oct 26 21:25 ..
+-rw-rw-r-- 1 user1 user_group    0 Oct 27 05:24 file_user1
+-rw-rw-r-- 1 user2 user_group    0 Oct 27 05:24 file_user2
+-rw-rw-r-- 1 user3 user_group    0 Oct 27 05:24 file_user3
+root@eltex-practice2-pg2-v15:~# sudo -u user1 rm -f /opt/share/file_user1
+sudo -u user2 rm -f /opt/share/file_user2
+sudo -u user3 rm -f /opt/share/file_user3
+root@eltex-practice2-pg2-v15:~# ls -la /opt/share/
+total 8
+drwxrws--T 2 root user_group 4096 Oct 27 05:26 .
+drwxr-xr-x 3 root root       4096 Oct 26 21:25 ..
+root@eltex-practice2-pg2-v15:~#
+
+13)Разрешите user1 выполнять привилегированную команду dmesg при помощи команды sudo, а
+user2 – при помощи скрипта на языке bash с установленным флагом SUID
+root@eltex-practice2-pg2-v15:~# sudo bash -c 'echo "user1 ALL=(ALL) NOPASSWD: /usr/bin/dmesg" >> /etc/sudoers'
+root@eltex-practice2-pg2-v15:~# sudo bash -c 'echo -e "#!/bin/bash\n/usr/bin/dmesg" > /usr/local/bin/dmesg_suid'
+root@eltex-practice2-pg2-v15:~# sudo chmod +x /usr/local/bin/dmesg_suid
+root@eltex-practice2-pg2-v15:~# sudo chown root:user2 /usr/local/bin/dmesg_suid
+root@eltex-practice2-pg2-v15:~# sudo chmod 4750 /usr/local/bin/dmesg_suid
+
+14)Для всех пользователей user* задайте время действия пароля – 10 дней.
+root@eltex-practice2-pg2-v15:~# sudo chage -M 10 user*
+chage: user 'user*' does not exist in /etc/passwd
+root@eltex-practice2-pg2-v15:~# sudo chage -M 10 user1
+root@eltex-practice2-pg2-v15:~# sudo chage -M 10 user2
+root@eltex-practice2-pg2-v15:~# sudo chage -M 10 user3
+
+15)Отредактируйте файл /etc/motd, вписав туда свое имя и фамилию
+root@eltex-practice2-pg2-v15:~# echo "Виталий Тривайлов" > /etc/motd
+root@eltex-practice2-pg2-v15:~# cat /etc/motd | tail -n 5
+Виталий Тривайлов
+
+16)Создайте копию содержимого каталога /etc в каталог /root/etc_backup при помощи программы
+rcync
+root@eltex-practice2-pg2-v15:~# rsync -a /etc/ /root/etc_backup/
+
+17)Заархивируйте содержимое каталога /root/etc_backup архиватором tar, используйте алгоритмы
+сжатия gzip, bzip2, 7zip, сравните размеры полученных файлов
+root@eltex-practice2-pg2-v15:~# tar -czf /root/etc_backup.tar.gz -C /root etc_backup
+root@eltex-practice2-pg2-v15:~# tar -cjf /root/etc_backup.tar.bz2 -C /root etc_backup
+root@eltex-practice2-pg2-v15:~# 7z a /root/etc_backup.7z /root/etc_backup
+root@eltex-practice2-pg2-v15:~# ls -lh /root/etc_backup.*
+-rw-r--r-- 1 root root 4.5M Nov  9 21:07 /root/etc_backup.7z
+-rw-r--r-- 1 root root 549K Nov  9 21:07 /root/etc_backup.tar.bz2
+-rw-r--r-- 1 root root 583K Nov  9 21:06 /root/etc_backup.tar.gz
+
+18)Отредактируйте файл /etc/motd, вписав туда текущую дату и время, синхронизируйте каталог
+/root/etc_backup с каталогом /etc при помощи rsync, добавьте файл motd в архив, сжатый gzip
+root@eltex-practice2-pg2-v15:~# echo "$(date)" >> /etc/motd
+root@eltex-practice2-pg2-v15:~# rsync -a /etc/ /root/etc_backup/
+root@eltex-practice2-pg2-v15:~# tar -czf /root/etc_backup-2.tar.gz -C /root etc_backup
+
+19)Сравните содержимое архива, упакованного bzip2 с сорержимым каталога /root/etc_backup
+   81  tar -tjf /root/etc_backup.tar.bz2 | sort > /root/archive_bzip2.txt
+   82  ls -1R /root/etc_backup | sort > /root/etc_backup.txt
+   83  diff /root/archive_bzip2.txt /root/etc_backup.txt
+
+20)Распакуйте архивы etc_backup, упакованные gzip и 7zip в каталоги /root/etc_backup_gzip и
+/root/etc_backup_7zip, сравните программой diff файлы motd в этих каталогах.
+root@eltex-practice2-pg2-v15:~# mkdir -p /root/etc_backup_gzip /root/etc_backup_7zip
+root@eltex-practice2-pg2-v15:~# 7z x /root/etc_backup.7z -o/root/etc_backup_7zip
+root@eltex-practice2-pg2-v15:~# tar -xzf /root/etc_backup-2.tar.gz -C /root/etc_backup_gzip
+diff: /root/etc_backup_7zip/root/etc_backup/motd: No such file or directory
+root@eltex-practice2-pg2-v15:~# diff /root/etc_backup_gzip/etc_backup/motd /root/etc_backup_7zip/etc_backup/motd
+2d1
+< Sun Nov  9 09:14:32 PM UTC 2025
+root@eltex-practice2-pg2-v15:~#
+
