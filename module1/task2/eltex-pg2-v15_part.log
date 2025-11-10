@@ -1,0 +1,768 @@
+eltex-pg2-v15@eltex-2025-summer:~$ ls
+ls           lsblk        lscpu        lsinitramfs  lsirq        lslogins     lsmod        lsof         lsusb
+lsattr       lsb_release  lsfd         lsipc        lslocks      lsmem        lsns         lspci
+eltex-pg2-v15@eltex-2025-summer:~$ ls
+eltex-pg2-v15_part.log  report_part1.txt
+eltex-pg2-v15@eltex-2025-summer:~$ lsblk
+NAME                 MAJ:MIN RM  SIZE RO TYPE MOUNTPOINTS
+sda                    8:0    0   32G  0 disk
+├─sda1                 8:1    0  487M  0 part /boot
+├─sda2                 8:2    0    1K  0 part
+└─sda5                 8:5    0 31.5G  0 part
+  ├─eltex--vg-root   254:0    0 10.8G  0 lvm  /
+  ├─eltex--vg-swap_1 254:1    0  976M  0 lvm  [SWAP]
+  └─eltex--vg-home   254:2    0 19.7G  0 lvm  /home
+sr0                   11:0    1 1024M  0
+eltex-pg2-v15@eltex-2025-summer:~$ lscpu
+Architecture:                x86_64
+  CPU op-mode(s):            32-bit, 64-bit
+  Address sizes:             40 bits physical, 48 bits virtual
+  Byte Order:                Little Endian
+CPU(s):                      4
+  On-line CPU(s) list:       0-3
+Vendor ID:                   AuthenticAMD
+  Model name:                QEMU Virtual CPU version 2.5+
+    CPU family:              15
+    Model:                   107
+    Thread(s) per core:      1
+    Core(s) per socket:      4
+    Socket(s):               1
+    Stepping:                1
+    BogoMIPS:                6799.99
+    Flags:                   fpu de pse tsc msr pae mce cx8 apic sep mtrr pge mca
+                             cmov pat pse36 clflush mmx fxsr sse sse2 ht syscall n
+                             x lm rep_good nopl cpuid extd_apicid tsc_known_freq p
+                             ni ssse3 cx16 sse4_1 sse4_2 x2apic popcnt aes hypervi
+                             sor lahf_lm cmp_legacy 3dnowprefetch vmmcall
+Virtualization features:
+  Hypervisor vendor:         KVM
+  Virtualization type:       full
+Caches (sum of all):
+  L1d:                       256 KiB (4 instances)
+  L1i:                       256 KiB (4 instances)
+  L2:                        2 MiB (4 instances)
+  L3:                        64 MiB (4 instances)
+NUMA:
+  NUMA node(s):              1
+  NUMA node0 CPU(s):         0-3
+Vulnerabilities:
+  Gather data sampling:      Not affected
+  Indirect target selection: Not affected
+  Itlb multihit:             Not affected
+  L1tf:                      Not affected
+  Mds:                       Not affected
+  Meltdown:                  Not affected
+  Mmio stale data:           Not affected
+  Reg file data sampling:    Not affected
+  Retbleed:                  Not affected
+  Spec rstack overflow:      Not affected
+  Spec store bypass:         Not affected
+  Spectre v1:                Mitigation; usercopy/swapgs barriers and __user point
+                             er sanitization
+  Spectre v2:                Mitigation; Retpolines; STIBP disabled; RSB filling;
+                             PBRSB-eIBRS Not affected; BHI Not affected
+  Srbds:                     Not affected
+  Tsa:                       Not affected
+  Tsx async abort:           Not affected
+  Vmscape:                   Not affected
+
+eltex-pg2-v15@eltex-2025-summer:~$ lsinitramfs
+
+Usage: lsinitramfs [-l] initramfs-file...
+
+Options:
+  -l   Display long and more verbose listing of initramfs content
+
+See lsinitramfs(8) for further details.
+
+eltex-pg2-v15@eltex-2025-summer:~$ lsirq
+IRQ    TOTAL NAME
+LOC 62096837 Local timer interrupts
+CAL 48386911 Function call interrupts
+RES  8989192 Rescheduling interrupts
+ 10  2105458 IO-APIC 10-fasteoi ens18
+ 15   520889 IO-APIC 15-edge ata_piix
+TLB   290769 TLB shootdowns
+ 32   263631 PCI-MSI 49153-edge virtio0-virtqueues
+ 29    67873 PCI-MSI 540677-edge virtio2-request
+ 30    63237 PCI-MSI 540678-edge virtio2-request
+ 28    59808 PCI-MSI 540676-edge virtio2-request
+ 27    58969 PCI-MSI 540675-edge virtio2-request
+MCP     6748 Machine check polls
+  1     2294 IO-APIC 1-edge i8042
+ 12      948 IO-APIC 12-edge i8042
+ 11       34 IO-APIC 11-fasteoi uhci_hcd:usb1
+  0       30 IO-APIC 2-edge timer
+ 34       24 PCI-MSI 131073-edge virtio1-virtqueues
+  6        3 IO-APIC 6-edge floppy
+  8        1 IO-APIC 8-edge rtc0
+  9        0 IO-APIC 9-fasteoi acpi
+ 14        0 IO-APIC 14-edge ata_piix
+ 24        0 PCI-MSI 540672-edge virtio2-config
+ 25        0 PCI-MSI 540673-edge virtio2-control
+ 26        0 PCI-MSI 540674-edge virtio2-event
+ 31        0 PCI-MSI 49152-edge virtio0-config
+ 33        0 PCI-MSI 131072-edge virtio1-config
+NMI        0 Non-maskable interrupts
+SPU        0 Spurious interrupts
+PMI        0 Performance monitoring interrupts
+IWI        0 IRQ work interrupts
+RTR        0 APIC ICR read retries
+TRM        0 Thermal event interrupts
+THR        0 Threshold APIC interrupts
+DFR        0 Deferred Error APIC interrupts
+MCE        0 Machine check exceptions
+ERR        0
+MIS        0
+PIN        0 Posted-interrupt notification event
+NPI        0 Nested posted-interrupt event
+PIW        0 Posted-interrupt wakeup event
+
+eltex-pg2-v15@eltex-2025-summer:~$ lslogins
+  UID USER             PROC PWD-LOCK PWD-DENY  LAST-LOGIN GECOS
+    0 root              121        0        0       14:25 root
+    1 daemon              0                               daemon
+    2 bin                 0                               bin
+    3 sys                 0                               sys
+    4 sync                0                               sync
+    5 games               0                               games
+    6 man                 0                               man
+    7 lp                  0                               lp
+    8 mail                0                               mail
+    9 news                0                               news
+   10 uucp                0                               uucp
+   13 proxy               0                               proxy
+   33 www-data            0                               www-data
+   34 backup              0                               backup
+   38 list                0                               Mailing List Manager
+   39 irc                 0                               ircd
+   42 _apt                0
+  100 messagebus          1
+  101 sshd                0
+  997 systemd-timesync    1                               systemd Time Synchronization
+  998 systemd-network     0                               systemd Network Management
+ 1000 tech                7                   Oct09/18:59 tech,,,
+ 1061 user2               0
+ 1062 eltex-pg1-v1        4                         13:12
+ 1063 eltex-pg1-v2       18                         17:26
+ 1064 eltex-pg1-v3        4                   Oct14/12:49
+ 1065 eltex-pg1-v4        0
+ 1066 eltex-pg1-v5        4                   Oct09/18:56
+ 1067 eltex-pg1-v6        6                         17:26
+ 1068 eltex-pg1-v7        4                   Oct14/16:04
+ 1069 eltex-pg1-v8        0
+ 1070 eltex-pg1-v9        5                   Oct14/23:22
+ 1071 eltex-pg1-v10       4                   Oct09/17:37
+ 1072 eltex-pg1-v11       0                   Oct11/17:18
+ 1073 eltex-pg1-v12      10                         16:01
+ 1074 eltex-pg1-v13       0                   Oct09/18:46
+ 1075 eltex-pg1-v14       5                         17:19
+ 1076 eltex-pg1-v15       0
+ 1077 eltex-pg1-v16       8                   Oct14/23:09
+ 1078 eltex-pg1-v17      11                         14:29
+ 1079 eltex-pg1-v18       7                   Oct09/18:43
+ 1080 eltex-pg1-v19       4                   Oct14/20:17
+ 1081 eltex-pg1-v20       9                         12:27
+ 1082 eltex-pg1-v21      14                         16:48
+ 1083 eltex-pg1-v22       4                   Oct11/12:16
+ 1084 eltex-pg1-v23       6                         17:14
+ 1085 eltex-pg1-v24       6                   Oct14/17:33
+ 1086 eltex-pg1-v25       0
+ 1087 eltex-pg1-v26       0
+ 1088 eltex-pg1-v27       0
+ 1089 eltex-pg1-v28       0
+ 1090 eltex-pg1-v29       0
+ 1091 eltex-pg1-v30       0
+ 1092 eltex-pg2-v1        4                         17:27
+ 1093 eltex-pg2-v2        4                   Oct12/18:55
+ 1094 eltex-pg2-v3        4                   Oct10/00:37
+ 1095 eltex-pg2-v4       13                         17:19
+ 1096 eltex-pg2-v5       26                         17:25
+ 1097 eltex-pg2-v6        6                         17:17
+ 1098 eltex-pg2-v7       27                   Oct14/15:13
+ 1099 eltex-pg2-v8       11                         17:07
+ 1100 eltex-pg2-v9        0
+ 1101 eltex-pg2-v10      12                         17:22
+ 1102 eltex-pg2-v11       6                         17:14
+ 1103 eltex-pg2-v12       0
+ 1104 eltex-pg2-v13      25                         17:15
+ 1105 eltex-pg2-v14       7                         17:18
+ 1106 eltex-pg2-v15      22                         17:20
+ 1107 eltex-pg2-v16      43                         17:17
+ 1108 eltex-pg2-v17      16                         17:25
+ 1109 eltex-pg2-v18       0
+ 1110 eltex-pg2-v19       0                   Oct09/20:19
+ 1111 eltex-pg2-v20       4                         13:59
+ 1112 eltex-pg2-v21       8                         17:27
+ 1113 eltex-pg2-v22       5                   Oct09/20:56
+ 1114 eltex-pg2-v23       8                         17:27
+ 1115 eltex-pg2-v24      10                         17:20
+ 1116 eltex-pg2-v25       0
+ 1117 eltex-pg2-v26       0
+ 1118 eltex-pg2-v27       0
+ 1119 eltex-pg2-v28       0
+ 1120 eltex-pg2-v29       0
+ 1121 eltex-pg2-v30       0
+65534 nobody              0        0        0             nobody
+
+eltex-pg2-v15@eltex-2025-summer:~$ lsmod
+Module                  Size  Used by
+binfmt_misc            28672  1
+sha512_ssse3           49152  0
+sha512_generic         16384  1 sha512_ssse3
+sha256_ssse3           32768  0
+sha1_ssse3             32768  0
+sg                     40960  0
+virtio_console         40960  1
+aesni_intel           393216  0
+virtio_balloon         24576  0
+crypto_simd            16384  1 aesni_intel
+cryptd                 28672  1 crypto_simd
+joydev                 28672  0
+evdev                  28672  2
+button                 24576  0
+pcspkr                 16384  0
+serio_raw              20480  0
+configfs               57344  1
+loop                   32768  0
+fuse                  176128  1
+efi_pstore             16384  0
+qemu_fw_cfg            20480  0
+ip_tables              36864  0
+x_tables               61440  1 ip_tables
+autofs4                53248  2
+ext4                  983040  3
+crc16                  16384  1 ext4
+mbcache                16384  1 ext4
+jbd2                  167936  1 ext4
+crc32c_generic         16384  0
+dm_mod                184320  10
+hid_generic            16384  0
+usbhid                 65536  0
+hid                   159744  2 usbhid,hid_generic
+sd_mod                 65536  4
+t10_pi                 16384  1 sd_mod
+crc64_rocksoft         20480  1 t10_pi
+crc64                  20480  1 crc64_rocksoft
+crc_t10dif             20480  1 t10_pi
+crct10dif_generic      16384  1
+sr_mod                 28672  0
+cdrom                  81920  1 sr_mod
+                       crct10dif_common       16384  2 crct10dif_generic,crc_t10dif
+ata_generic            16384  0
+bochs                  16384  0
+drm_vram_helper        20480  1 bochs
+virtio_scsi            28672  2
+drm_kms_helper        212992  4 bochs,drm_vram_helper
+drm_ttm_helper         16384  2 bochs,drm_vram_helper
+virtio_pci             24576  0
+ttm                    94208  2 drm_vram_helper,drm_ttm_helper
+virtio_pci_legacy_dev    16384  1 virtio_pci
+virtio_pci_modern_dev    20480  1 virtio_pci
+crc32c_intel           24576  5
+psmouse               184320  0
+e1000                 163840  0
+ata_piix               45056  0
+virtio                 20480  4 virtio_console,virtio_balloon,virtio_scsi,virtio_pci
+virtio_ring            45056  4 virtio_console,virtio_balloon,virtio_scsi,virtio_pci
+drm                   614400  6 drm_kms_helper,bochs,drm_vram_helper,drm_ttm_helper,ttm
+uhci_hcd               57344  0
+libata                401408  2 ata_piix,ata_generic
+ehci_hcd              102400  0
+usbcore               348160  3 usbhid,ehci_hcd,uhci_hcd
+i2c_piix4              28672  0
+scsi_mod              286720  5 virtio_scsi,sd_mod,libata,sg,sr_mod
+usb_common             16384  3 usbcore,ehci_hcd,uhci_hcd
+scsi_common            16384  4 scsi_mod,libata,sg,sr_mod
+floppy                 86016  0
+
+eltex-pg2-v15@eltex-2025-summer:~$ lsof
+COMMAND       PID     TID TASKCMD               USER   FD      TYPE             DEVICE SIZE/OFF       NODE NAME
+systemd         1                               root  cwd   unknown                                        /proc/1/cwd (readlink: Permission denied)
+systemd         1                               root  rtd   unknown                                        /proc/1/root (readlink: Permission denied)
+systemd         1                               root  txt   unknown                                        /proc/1/exe (readlink: Permission denied)
+systemd         1                               root NOFD                                                  /proc/1/fd (opendir: Permission denied)
+kthreadd        2                               root  cwd   unknown                                        /proc/2/cwd (readlink: Permission denied)
+kthreadd        2                               root  rtd   unknown                                        /proc/2/root (readlink: Permission denied)
+kthreadd        2                               root  txt   unknown                                        /proc/2/exe (readlink: Permission denied)
+kthreadd        2                               root NOFD                                                  /proc/2/fd (opendir: Permission denied)
+rcu_gp          3                               root  cwd   unknown                                        /proc/3/cwd (readlink: Permission denied)
+rcu_gp          3                               root  rtd   unknown                                        /proc/3/root (readlink: Permission denied)
+rcu_gp          3                               root  txt   unknown                                        /proc/3/exe (readlink: Permission denied)
+rcu_gp          3                               root NOFD                                                  /proc/3/fd (opendir: Permission denied)
+rcu_par_g       4                               root  cwd   unknown                                        /proc/4/cwd (readlink: Permission denied)
+rcu_par_g       4                               root  rtd   unknown                                        /proc/4/root (readlink: Permission denied)
+rcu_par_g       4                               root  txt   unknown                                        /proc/4/exe (readlink: Permission denied)
+rcu_par_g       4                               root NOFD                                                  /proc/4/fd (opendir: Permission denied)
+slub_flus       5                               root  cwd   unknown                                        /proc/5/cwd (readlink: Permission denied)
+slub_flus       5                               root  rtd   unknown                                        /proc/5/root (readlink: Permission denied)
+slub_flus       5                               root  txt   unknown                                        /proc/5/exe (readlink: Permission denied)
+slub_flus       5                               root NOFD                                                  /proc/5/fd (opendir: Permission denied)
+netns           6                               root  cwd   unknown                                        /proc/6/cwd (readlink: Permission denied)
+netns           6                               root  rtd   unknown                                        /proc/6/root (readlink: Permission denied)
+netns           6                               root  txt   unknown                                        /proc/6/exe (readlink: Permission denied)
+netns           6                               root NOFD                                                  /proc/6/fd (opendir: Permission denied)
+mm_percpu      10                               root  cwd   unknown                                        /proc/10/cwd (readlink: Permission denied)
+mm_percpu      10                               root  rtd   unknown                                        /proc/10/root (readlink: Permission denied)
+mm_percpu      10                               root  txt   unknown                                        /proc/10/exe (readlink: Permission denied)
+mm_percpu      10                               root NOFD                                                  /proc/10/fd (opendir: Permission denied)
+rcu_tasks      11                               root  cwd   unknown                                        /proc/11/cwd (readlink: Permission denied)
+rcu_tasks      11                               root  rtd   unknown                                        /proc/11/root (readlink: Permission denied)
+rcu_tasks      11                               root  txt   unknown                                        /proc/11/exe (readlink: Permission denied)
+rcu_tasks      11                               root NOFD                                                  /proc/11/fd (opendir: Permission denied)
+rcu_tasks      12                               root  cwd   unknown                                        /proc/12/cwd (readlink: Permission denied)
+rcu_tasks      12                               root  rtd   unknown                                        /proc/12/root (readlink: Permission denied)
+rcu_tasks      12                               root  txt   unknown                                        /proc/12/exe (readlink: Permission denied)
+rcu_tasks      12                               root NOFD                                                  /proc/12/fd (opendir: Permission denied)
+rcu_tasks      13                               root  cwd   unknown                                        /proc/13/cwd (readlink: Permission denied)
+rcu_tasks      13                               root  rtd   unknown                                        /proc/13/root (readlink: Permission denied)
+...
+systemd   4044956                      eltex-pg1-v12  rtd   unknown                                        /proc/4044956/root (readlink: Permission denied)
+systemd   4044956                      eltex-pg1-v12  txt   unknown                                        /proc/4044956/exe (readlink: Permission denied)
+systemd   4044956                      eltex-pg1-v12 NOFD                                                  /proc/4044956/fd (opendir: Permission denied)
+(sd-pam)  4044957                      eltex-pg1-v12  cwd   unknown                                        /proc/4044957/cwd (readlink: Permission denied)
+(sd-pam)  4044957                      eltex-pg1-v12  rtd   unknown                                        /proc/4044957/root (readlink: Permission denied)
+(sd-pam)  4044957                      eltex-pg1-v12  txt   unknown                                        /proc/4044957/exe (readlink: Permission denied)
+(sd-pam)  4044957                      eltex-pg1-v12 NOFD                                                  /proc/4044957/fd (opendir: Permission denied)
+screen    4084703                       eltex-pg1-v2  cwd   unknown                                        /proc/4084703/cwd (readlink: Permission denied)
+screen    4084703                       eltex-pg1-v2  rtd   unknown                                        /proc/4084703/root (readlink: Permission denied)
+screen    4084703                       eltex-pg1-v2  txt   unknown                                        /proc/4084703/exe (readlink: Permission denied)
+screen    4084703                       eltex-pg1-v2 NOFD                                                  /proc/4084703/fd (opendir: Permission denied)
+bash      4084704                       eltex-pg1-v2  cwd   unknown                                        /proc/4084704/cwd (readlink: Permission denied)
+bash      4084704                       eltex-pg1-v2  rtd   unknown                                        /proc/4084704/root (readlink: Permission denied)
+bash      4084704                       eltex-pg1-v2  txt   unknown                                        /proc/4084704/exe (readlink: Permission denied)
+bash      4084704                       eltex-pg1-v2 NOFD                                                  /proc/4084704/fd (opendir: Permission denied)
+systemd   4105766                      eltex-pg1-v24  cwd   unknown                                        /proc/4105766/cwd (readlink: Permission denied)
+systemd   4105766                      eltex-pg1-v24  rtd   unknown                                        /proc/4105766/root (readlink: Permission denied)
+systemd   4105766                      eltex-pg1-v24  txt   unknown                                        /proc/4105766/exe (readlink: Permission denied)
+systemd   4105766                      eltex-pg1-v24 NOFD                                                  /proc/4105766/fd (opendir: Permission denied)
+(sd-pam)  4105767                      eltex-pg1-v24  cwd   unknown                                        /proc/4105767/cwd (readlink: Permission denied)
+(sd-pam)  4105767                      eltex-pg1-v24  rtd   unknown                                        /proc/4105767/root (readlink: Permission denied)
+(sd-pam)  4105767                      eltex-pg1-v24  txt   unknown                                        /proc/4105767/exe (readlink: Permission denied)
+(sd-pam)  4105767                      eltex-pg1-v24 NOFD                                                  /proc/4105767/fd (opendir: Permission denied)
+screen    4106720                      eltex-pg1-v24  cwd   unknown                                        /proc/4106720/cwd (readlink: Permission denied)
+screen    4106720                      eltex-pg1-v24  rtd   unknown                                        /proc/4106720/root (readlink: Permission denied)
+screen    4106720                      eltex-pg1-v24  txt   unknown                                        /proc/4106720/exe (readlink: Permission denied)
+screen    4106720                      eltex-pg1-v24 NOFD                                                  /proc/4106720/fd (opendir: Permission denied)
+bash      4106721                      eltex-pg1-v24  cwd   unknown                                        /proc/4106721/cwd (readlink: Permission denied)
+bash      4106721                      eltex-pg1-v24  rtd   unknown                                        /proc/4106721/root (readlink: Permission denied)
+bash      4106721                      eltex-pg1-v24  txt   unknown                                        /proc/4106721/exe (readlink: Permission denied)
+bash      4106721                      eltex-pg1-v24 NOFD                                                  /proc/4106721/fd (opendir: Permission denied)
+screen    4107068                      eltex-pg1-v24  cwd   unknown                                        /proc/4107068/cwd (readlink: Permission denied)
+screen    4107068                      eltex-pg1-v24  rtd   unknown                                        /proc/4107068/root (readlink: Permission denied)
+screen    4107068                      eltex-pg1-v24  txt   unknown                                        /proc/4107068/exe (readlink: Permission denied)
+screen    4107068                      eltex-pg1-v24 NOFD                                                  /proc/4107068/fd (opendir: Permission denied)
+bash      4107069                      eltex-pg1-v24  cwd   unknown                                        /proc/4107069/cwd (readlink: Permission denied)
+bash      4107069                      eltex-pg1-v24  rtd   unknown                                        /proc/4107069/root (readlink: Permission denied)
+bash      4107069                      eltex-pg1-v24  txt   unknown                                        /proc/4107069/exe (readlink: Permission denied)
+bash      4107069                      eltex-pg1-v24 NOFD                                                  /proc/4107069/fd (opendir: Permission denied)
+
+eltex-pg2-v15@eltex-2025-summer:~$ ls
+ls           lsblk        lscpu        lsinitramfs  lsirq        lslogins     lsmod        lsof         lsusb
+lsattr       lsb_release  lsfd         lsipc        lslocks      lsmem        lsns         lspci
+
+eltex-pg2-v15@eltex-2025-summer:~$ lsusb
+Bus 001 Device 002: ID 0627:0001 Adomax Technology Co., Ltd QEMU Tablet
+Bus 001 Device 001: ID 1d6b:0001 Linux Foundation 1.1 root hub
+
+eltex-pg2-v15@eltex-2025-summer:~$ lsattr
+--------------e------- ./report_part1.txt
+--------------e------- ./eltex-pg2-v15_part.log
+--------------e------- ./help
+
+eltex-pg2-v15@eltex-2025-summer:~$ lsb_release
+No LSB modules are available.
+
+eltex-pg2-v15@eltex-2025-summer:~$ lsfd
+COMMAND     PID          USER  ASSOC MODE TYPE       SOURCE MNTID      INODE NAME
+systemd     800 eltex-pg2-v15    exe  ---  REG         dm-0     0     270728 /usr/lib/systemd/systemd
+systemd     800 eltex-pg2-v15    cwd  ---  DIR         dm-0     0          2 /
+systemd     800 eltex-pg2-v15    rtd  ---  DIR         dm-0     0          2 /
+systemd     800 eltex-pg2-v15 cgroup  ---  REG          0:4     0 4026531835 cgroup:[4026531835]
+systemd     800 eltex-pg2-v15    ipc  ---  REG          0:4     0 4026531839 ipc:[4026531839]
+systemd     800 eltex-pg2-v15    mnt  ---  REG          0:4     0 4026531841 mnt:[4026531841]
+systemd     800 eltex-pg2-v15    net  ---  REG          0:4     0 4026531840 net:[4026531840]
+systemd     800 eltex-pg2-v15    pid  ---  REG          0:4     0 4026531836 pid:[4026531836]
+systemd     800 eltex-pg2-v15  pid4c  ---  REG          0:4     0 4026531836 pid:[4026531836]
+systemd     800 eltex-pg2-v15   time  ---  REG          0:4     0 4026531834 time:[4026531834]
+systemd     800 eltex-pg2-v15 time4c  ---  REG          0:4     0 4026531834 time:[4026531834]
+systemd     800 eltex-pg2-v15   user  ---  REG          0:4     0 4026531837 user:[4026531837]
+systemd     800 eltex-pg2-v15    uts  ---  REG          0:4     0 4026531838 uts:[4026531838]
+systemd     800 eltex-pg2-v15    mem  r--  REG         dm-0     0     270728 /usr/lib/systemd/systemd
+systemd     800 eltex-pg2-v15    mem  r-x  REG         dm-0     0     270728 /usr/lib/systemd/systemd
+systemd     800 eltex-pg2-v15    mem  r--  REG         dm-0     0     270728 /usr/lib/systemd/systemd
+systemd     800 eltex-pg2-v15    mem  r--  REG         dm-0     0     270728 /usr/lib/systemd/systemd
+systemd     800 eltex-pg2-v15    mem  rw-  REG         dm-0     0     270728 /usr/lib/systemd/systemd
+systemd     800 eltex-pg2-v15    mem  r--  REG         dm-0     0     261001 /usr/lib/x86_64-linux-gnu/libgpg-error.so.0.33.1
+systemd     800 eltex-pg2-v15    mem  r-x  REG         dm-0     0     261001 /usr/lib/x86_64-linux-gnu/libgpg-error.so.0.33.1
+systemd     800 eltex-pg2-v15    mem  r--  REG         dm-0     0     261001 /usr/lib/x86_64-linux-gnu/libgpg-error.so.0.33.1
+systemd     800 eltex-pg2-v15    mem  r--  REG         dm-0     0     261001 /usr/lib/x86_64-linux-gnu/libgpg-error.so.0.33.1
+systemd     800 eltex-pg2-v15    mem  rw-  REG         dm-0     0     261001 /usr/lib/x86_64-linux-gnu/libgpg-error.so.0.33.1
+systemd     800 eltex-pg2-v15    mem  r--  REG         dm-0     0     261262 /usr/lib/x86_64-linux-gnu/libpcre2-8.so.0.11.2
+systemd     800 eltex-pg2-v15    mem  r-x  REG         dm-0     0     261262 /usr/lib/x86_64-linux-gnu/libpcre2-8.so.0.11.2
+systemd     800 eltex-pg2-v15    mem  r--  REG         dm-0     0     261262 /usr/lib/x86_64-linux-gnu/libpcre2-8.so.0.11.2
+systemd     800 eltex-pg2-v15    mem  r--  REG         dm-0     0     261262 /usr/lib/x86_64-linux-gnu/libpcre2-8.so.0.11.2
+systemd     800 eltex-pg2-v15    mem  rw-  REG         dm-0     0     261262 /usr/lib/x86_64-linux-gnu/libpcre2-8.so.0.11.2
+systemd     800 eltex-pg2-v15    mem  r--  REG         dm-0     0     261028 /usr/lib/x86_64-linux-gnu/libcrypto.so.3
+systemd     800 eltex-pg2-v15    mem  r-x  REG         dm-0     0     261028 /usr/lib/x86_64-linux-gnu/libcrypto.so.3
+systemd     800 eltex-pg2-v15    mem  r--  REG         dm-0     0     261028 /usr/lib/x86_64-linux-gnu/libcrypto.so.3
+systemd     800 eltex-pg2-v15    mem  r--  REG         dm-0     0     261028 /usr/lib/x86_64-linux-gnu/libcrypto.so.3
+systemd     800 eltex-pg2-v15    mem  rw-  REG         dm-0     0     261028 /usr/lib/x86_64-linux-gnu/libcrypto.so.3
+systemd     800 eltex-pg2-v15    mem  r--  REG         dm-0     0     260981 /usr/lib/x86_64-linux-gnu/libcap-ng.so.0.0.0
+systemd     800 eltex-pg2-v15    mem  r-x  REG         dm-0     0     260981 /usr/lib/x86_64-linux-gnu/libcap-ng.so.0.0.0
+systemd     800 eltex-pg2-v15    mem  r--  REG         dm-0     0     260981 /usr/lib/x86_64-linux-gnu/libcap-ng.so.0.0.0
+systemd     800 eltex-pg2-v15    mem  r--  REG         dm-0     0     260981 /usr/lib/x86_64-linux-gnu/libcap-ng.so.0.0.0
+systemd     800 eltex-pg2-v15    mem  rw-  REG         dm-0     0     260981 /usr/lib/x86_64-linux-gnu/libcap-ng.so.0.0.0
+...
+lsfd    1535237 eltex-pg2-v15    cwd  ---  DIR         dm-2     0     131097 /home/eltex-pg2-v15
+lsfd    1535237 eltex-pg2-v15    rtd  ---  DIR         dm-0     0          2 /
+lsfd    1535237 eltex-pg2-v15 cgroup  ---  REG          0:4     0 4026531835 cgroup:[4026531835]
+lsfd    1535237 eltex-pg2-v15    ipc  ---  REG          0:4     0 4026531839 ipc:[4026531839]
+lsfd    1535237 eltex-pg2-v15    mnt  ---  REG          0:4     0 4026531841 mnt:[4026531841]
+lsfd    1535237 eltex-pg2-v15    net  ---  REG          0:4     0 4026531840 net:[4026531840]
+lsfd    1535237 eltex-pg2-v15    pid  ---  REG          0:4     0 4026531836 pid:[4026531836]
+lsfd    1535237 eltex-pg2-v15  pid4c  ---  REG          0:4     0 4026531836 pid:[4026531836]
+lsfd    1535237 eltex-pg2-v15   time  ---  REG          0:4     0 4026531834 time:[4026531834]
+lsfd    1535237 eltex-pg2-v15 time4c  ---  REG          0:4     0 4026531834 time:[4026531834]
+lsfd    1535237 eltex-pg2-v15   user  ---  REG          0:4     0 4026531837 user:[4026531837]
+lsfd    1535237 eltex-pg2-v15    uts  ---  REG          0:4     0 4026531838 uts:[4026531838]
+lsfd    1535237 eltex-pg2-v15    mem  r--  REG         dm-0     0     262014 /usr/bin/lsfd
+lsfd    1535237 eltex-pg2-v15    mem  r-x  REG         dm-0     0     262014 /usr/bin/lsfd
+lsfd    1535237 eltex-pg2-v15    mem  r--  REG         dm-0     0     262014 /usr/bin/lsfd
+lsfd    1535237 eltex-pg2-v15    mem  r--  REG         dm-0     0     262014 /usr/bin/lsfd
+lsfd    1535237 eltex-pg2-v15    mem  rw-  REG         dm-0     0     262014 /usr/bin/lsfd
+lsfd    1535237 eltex-pg2-v15    mem  r--  REG         dm-0     0     261171 /usr/lib/locale/locale-archive
+lsfd    1535237 eltex-pg2-v15    mem  r--  REG         dm-0     0     262901 /usr/lib/x86_64-linux-gnu/libc.so.6
+lsfd    1535237 eltex-pg2-v15    mem  r-x  REG         dm-0     0     262901 /usr/lib/x86_64-linux-gnu/libc.so.6
+lsfd    1535237 eltex-pg2-v15    mem  r--  REG         dm-0     0     262901 /usr/lib/x86_64-linux-gnu/libc.so.6
+lsfd    1535237 eltex-pg2-v15    mem  r--  REG         dm-0     0     262901 /usr/lib/x86_64-linux-gnu/libc.so.6
+lsfd    1535237 eltex-pg2-v15    mem  rw-  REG         dm-0     0     262901 /usr/lib/x86_64-linux-gnu/libc.so.6
+lsfd    1535237 eltex-pg2-v15    mem  r--  REG         dm-0     0     262000 /usr/lib/x86_64-linux-gnu/libsmartcols.so.1.1.0
+lsfd    1535237 eltex-pg2-v15    mem  r-x  REG         dm-0     0     262000 /usr/lib/x86_64-linux-gnu/libsmartcols.so.1.1.0
+lsfd    1535237 eltex-pg2-v15    mem  r--  REG         dm-0     0     262000 /usr/lib/x86_64-linux-gnu/libsmartcols.so.1.1.0
+lsfd    1535237 eltex-pg2-v15    mem  r--  REG         dm-0     0     262000 /usr/lib/x86_64-linux-gnu/libsmartcols.so.1.1.0
+lsfd    1535237 eltex-pg2-v15    mem  rw-  REG         dm-0     0     262000 /usr/lib/x86_64-linux-gnu/libsmartcols.so.1.1.0
+lsfd    1535237 eltex-pg2-v15    mem  r--  REG         dm-0     0     262898 /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
+lsfd    1535237 eltex-pg2-v15    mem  r-x  REG         dm-0     0     262898 /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
+lsfd    1535237 eltex-pg2-v15    mem  r--  REG         dm-0     0     262898 /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
+lsfd    1535237 eltex-pg2-v15    mem  r--  REG         dm-0     0     262898 /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
+lsfd    1535237 eltex-pg2-v15    mem  rw-  REG         dm-0     0     262898 /usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2
+lsfd    1535237 eltex-pg2-v15      0  rw-  CHR       pts:52    24         55 /dev/pts/52
+lsfd    1535237 eltex-pg2-v15      1  -w-  REG         dm-2    93     131127 /home/eltex-pg2-v15/help
+lsfd    1535237 eltex-pg2-v15      2  rw-  CHR       pts:52    24         55 /dev/pts/52
+lsfd    1535237 eltex-pg2-v15      3  r--  DIR         proc    22          1 /proc
+lsfd    1535237 eltex-pg2-v15      4  r--  DIR         proc    22    5775236 /proc/1535237
+lsfd    1535237 eltex-pg2-v15      5  r--  DIR         proc    22    5777582 /proc/1535237/fd
+
+eltex-pg2-v15@eltex-2025-summer:~$ lsipc
+RESOURCE DESCRIPTION                                              LIMIT USED  USE%
+MSGMNI   Number of message queues                                 32000    0 0.00%
+MSGMAX   Max size of message (bytes)                                 8K    -     -
+MSGMNB   Default max size of queue (bytes)                          16K    -     -
+SHMMNI   Shared memory segments                                    4096    0 0.00%
+SHMALL   Shared memory pages                       18446744073692774399    0 0.00%
+SHMMAX   Max size of shared memory segment (bytes)                  16E    -     -
+SHMMIN   Min size of shared memory segment (bytes)                   1B    -     -
+SEMMNI   Number of semaphore identifiers                          32000    0 0.00%
+SEMMNS   Total number of semaphores                          1024000000    0 0.00%
+SEMMSL   Max semaphores per semaphore set.                        32000    -     -
+SEMOPM   Max number of operations per semop(2)                      500    -     -
+SEMVMX   Semaphore max value                                      32767    -     -
+
+eltex-pg2-v15@eltex-2025-summer:~$ lslocks
+COMMAND   PID  TYPE SIZE MODE  M START END PATH
+cron      500 FLOCK      WRITE 0     0   0 /run...
+
+eltex-pg2-v15@eltex-2025-summer:~$ lsmem
+RANGE                                 SIZE  STATE REMOVABLE BLOCK
+0x0000000000000000-0x00000000bfffffff   3G online       yes  0-23
+0x0000000100000000-0x000000013fffffff   1G online       yes 32-39
+
+Memory block size:       128M
+Total online memory:       4G
+Total offline memory:      0B
+
+eltex-pg2-v15@eltex-2025-summer:~$ lsns
+        NS TYPE   NPROCS   PID USER          COMMAND
+4026531834 time       18   800 eltex-pg2-v15 /lib/systemd/systemd --user
+4026531835 cgroup     18   800 eltex-pg2-v15 /lib/systemd/systemd --user
+4026531836 pid        18   800 eltex-pg2-v15 /lib/systemd/systemd --user
+4026531837 user       18   800 eltex-pg2-v15 /lib/systemd/systemd --user
+4026531838 uts        18   800 eltex-pg2-v15 /lib/systemd/systemd --user
+4026531839 ipc        18   800 eltex-pg2-v15 /lib/systemd/systemd --user
+4026531840 net        18   800 eltex-pg2-v15 /lib/systemd/systemd --user
+4026531841 mnt        18   800 eltex-pg2-v15 /lib/systemd/systemd --user
+
+eltex-pg2-v15@eltex-2025-summer:~$ lspci
+00:00.0 Host bridge: Intel Corporation 440FX - 82441FX PMC [Natoma] (rev 02)
+00:01.0 ISA bridge: Intel Corporation 82371SB PIIX3 ISA [Natoma/Triton II]
+00:01.1 IDE interface: Intel Corporation 82371SB PIIX3 IDE [Natoma/Triton II]
+00:01.2 USB controller: Intel Corporation 82371SB PIIX3 USB [Natoma/Triton II] (rev 01)
+00:01.3 Bridge: Intel Corporation 82371AB/EB/MB PIIX4 ACPI (rev 03)
+00:02.0 VGA compatible controller: Device 1234:1111 (rev 02)
+00:03.0 Unclassified device [00ff]: Red Hat, Inc. Virtio memory balloon
+00:05.0 PCI bridge: Red Hat, Inc. QEMU PCI-PCI bridge
+00:08.0 Communication controller: Red Hat, Inc. Virtio console
+00:12.0 Ethernet controller: Intel Corporation 82540EM Gigabit Ethernet Controller (rev 03)
+00:1e.0 PCI bridge: Red Hat, Inc. QEMU PCI-PCI bridge
+00:1f.0 PCI bridge: Red Hat, Inc. QEMU PCI-PCI bridge
+01:01.0 SCSI storage controller: Red Hat, Inc. Virtio SCSI
+
+eltex-pg2-v15@eltex-2025-summer:~$ echo $HIST
+$HISTCMD       $HISTCONTROL   $HISTFILE      $HISTFILESIZE  $HISTSIZE
+eltex-pg2-v15@eltex-2025-summer:~$ echo $HIST
+$HISTCMD       $HISTCONTROL   $HISTFILE      $HISTFILESIZE  $HISTSIZE
+eltex-pg2-v15@eltex-2025-summer:~$ echo $HISTC
+$HISTCMD      $HISTCONTROL
+eltex-pg2-v15@eltex-2025-summer:~$ echo $HISTCMD
+132
+eltex-pg2-v15@eltex-2025-summer:~$ echo $HISTCONTROL
+ignoreboth
+eltex-pg2-v15@eltex-2025-summer:~$ echo $HISTFILE
+/home/eltex-pg2-v15/.bash_history
+eltex-pg2-v15@eltex-2025-summer:~$ echo $HISTFILESIZE
+2000
+eltex-pg2-v15@eltex-2025-summer:~$ echo $HISTSIZE
+1000
+
+Узнайте, сколько команд может храниться в файле истории.
+Из $HISTFILESIZE видим ответ 2000
+
+Выведите имена файлов и каталогов из домашнего каталога, которые
+начинаются с «.».
+
+eltex-pg2-v15@eltex-2025-summer:~$ find ~ .*
+/home/eltex-pg2-v15
+/home/eltex-pg2-v15/.viminfo
+/home/eltex-pg2-v15/.config
+/home/eltex-pg2-v15/.config/procps
+/home/eltex-pg2-v15/.ssh
+/home/eltex-pg2-v15/.ssh/id_rsa.pub
+/home/eltex-pg2-v15/.ssh/known_hosts
+/home/eltex-pg2-v15/.ssh/id_rsa
+/home/eltex-pg2-v15/.ssh/known_hosts.old
+/home/eltex-pg2-v15/.profile
+/home/eltex-pg2-v15/report_part1.txt
+/home/eltex-pg2-v15/eltex-pg2-v15_part.log
+/home/eltex-pg2-v15/.bash_logout
+/home/eltex-pg2-v15/help
+/home/eltex-pg2-v15/.log
+/home/eltex-pg2-v15/.local
+/home/eltex-pg2-v15/.local/share
+/home/eltex-pg2-v15/.local/share/nano
+/home/eltex-pg2-v15/MyKeySSH.pub
+/home/eltex-pg2-v15/practice2_eltex-pg2-v15_part1.log
+/home/eltex-pg2-v15/MyKeySSH
+/home/eltex-pg2-v15/.bash_history
+/home/eltex-pg2-v15/.bashrc
+.bash_history
+.bash_logout
+.bashrc
+.config
+.config/procps
+.local
+.local/share
+.local/share/nano
+.log
+.profile
+.ssh
+.ssh/id_rsa.pub
+.ssh/known_hosts
+.ssh/id_rsa
+.ssh/known_hosts.old
+.viminfo
+
+Настройте вывод даты выполнения команд, хранящихся в истории.
+eltex-pg2-v15@eltex-2025-summer:~$ export HISTTIMEFORMAT="%d/%m/%y %T "
+eltex-pg2-v15@eltex-2025-summer:~$ ls
+eltex-pg2-v15_part.log  MyKeySSH      practice2_eltex-pg2-v15_part1.log
+help                    MyKeySSH.pub  report_part1.txt
+eltex-pg2-v15@eltex-2025-summer:~$ rm help
+eltex-pg2-v15@eltex-2025-summer:~$ ls
+eltex-pg2-v15_part.log  MyKeySSH.pub                       report_part1.txt
+MyKeySSH                practice2_eltex-pg2-v15_part1.log
+eltex-pg2-v15@eltex-2025-summer:~$ history 5
+  146  17/10/25 15:06:59 export HISTTIMEFORMAT="%d/%m/%y %T "
+  147  17/10/25 15:07:08 ls
+  148  17/10/25 15:07:23 rm help
+  149  17/10/25 15:07:24 ls
+  150  17/10/25 15:07:56 history 5
+
+Настройте автоматическое сохранение набираемых команд в файле
+истории
+
+eltex-pg2-v15@eltex-2025-summer:~$ date
+Fri Oct 17 03:26:23 PM +07 2025
+eltex-pg2-v15@eltex-2025-summer:~$ history 3
+  150  17/10/25 15:07:56 history 5
+  151  17/10/25 15:26:23 date
+  152  17/10/25 15:27:04 history 3
+eltex-pg2-v15@eltex-2025-summer:~$ PROMPT_COMMAND="history -a"
+eltex-pg2-v15@eltex-2025-summer:~$ echo "test_auto_save_$(date +%s)"
+test_auto_save_1760695678
+eltex-pg2-v15@eltex-2025-summer:~$ history | tail -3
+  153  17/10/25 17:07:46 PROMPT_COMMAND="history -a"
+  154  17/10/25 17:07:58 echo "test_auto_save_$(date +%s)"
+  155  17/10/25 17:10:07 history | tail -3
+eltex-pg2-v15@eltex-2025-summer:~$ tail -3 ~/.bash_history
+echo "test_auto_save_$(date +%s)"
+#1760695807
+history | tail -3
+
+eltex-pg2-v15@eltex-2025-summer:~$ DATE=$(date +%d.%m.%Y)
+eltex-pg2-v15@eltex-2025-summer:~$ echo $DATE
+17.10.2025
+
+eltex-pg2-v15@eltex-2025-summer:~$ TIME=$(date +%H:%M:%S)
+eltex-pg2-v15@eltex-2025-summer:~$ echo $TIME
+17:34:15
+
+eltex-pg2-v15@eltex-2025-summer:~$ DATE_TIME="$DATE $TIME"
+eltex-pg2-v15@eltex-2025-summer:~$ echo $DATE_TIME
+17.10.2025 17:34:15
+
+eltex-pg2-v15@eltex-2025-summer:~$ ls /bin/*[0-9]* /sbin/*[0-9]*
+/bin/addr2line
+/bin/b2sum
+/bin/base32
+/bin/base64
+/bin/bunzip2
+/bin/bzip2
+/bin/bzip2recover
+/bin/c89
+/bin/c89-gcc
+/bin/c99
+/bin/c99-gcc
+/bin/cpan5.36-x86_64-linux-gnu
+/bin/cpp-12
+/bin/diff3
+/bin/enc2xs
+/bin/gcc-12
+/bin/gcc-ar-12
+/bin/gcc-nm-12
+/bin/gcc-ranlib-12
+/bin/gcov-12
+/bin/gcov-dump-12
+/bin/gcov-tool-12
+/bin/grub-menulst2cfg
+/bin/grub-mkpasswd-pbkdf2
+/bin/grub-syslinux2cfg
+/bin/h2ph
+/bin/h2xs
+/bin/i386
+/bin/linux32
+/bin/linux64
+/bin/lto-dump-12
+/bin/md5sum
+/bin/md5sum.textutils
+/bin/pdb3
+/bin/pdb3.11
+/bin/perl5.36.0
+/bin/perl5.36-x86_64-linux-gnu
+/bin/ping4
+/bin/ping6
+/bin/pl2pm
+/bin/pod2html
+/bin/pod2man
+/bin/pod2text
+/bin/pod2usage
+/bin/py3clean
+/bin/py3compile
+/bin/py3versions
+/bin/pydoc3
+/bin/pydoc3.11
+/bin/pygettext3
+/bin/pygettext3.11
+/bin/python3
+/bin/python3.11
+/bin/sha1sum
+/bin/sha224sum
+/bin/sha256sum
+/bin/sha384sum
+/bin/sha512sum
+/bin/ssh-argv0
+/bin/systemd-id128
+/bin/traceroute6
+/bin/traceroute6.db
+/bin/x86_64
+/bin/x86_64-linux-gnu-addr2line
+/bin/x86_64-linux-gnu-ar
+/bin/x86_64-linux-gnu-as
+/bin/x86_64-linux-gnu-c++filt
+/bin/x86_64-linux-gnu-cpp
+/bin/x86_64-linux-gnu-cpp-12
+/bin/x86_64-linux-gnu-dwp
+/bin/x86_64-linux-gnu-elfedit
+/bin/x86_64-linux-gnu-gcc
+/bin/x86_64-linux-gnu-gcc-12
+/bin/x86_64-linux-gnu-gcc-ar
+/bin/x86_64-linux-gnu-gcc-ar-12
+/bin/x86_64-linux-gnu-gcc-nm
+/bin/x86_64-linux-gnu-gcc-nm-12
+/bin/x86_64-linux-gnu-gcc-ranlib
+/bin/x86_64-linux-gnu-gcc-ranlib-12
+/bin/x86_64-linux-gnu-gcov
+/bin/x86_64-linux-gnu-gcov-12
+/bin/x86_64-linux-gnu-gcov-dump
+/bin/x86_64-linux-gnu-gcov-dump-12
+/bin/x86_64-linux-gnu-gcov-tool
+/bin/x86_64-linux-gnu-gcov-tool-12
+/bin/x86_64-linux-gnu-gold
+/bin/x86_64-linux-gnu-gp-archive
+/bin/x86_64-linux-gnu-gp-collect-app
+/bin/x86_64-linux-gnu-gp-display-html
+/bin/x86_64-linux-gnu-gp-display-src
+/bin/x86_64-linux-gnu-gp-display-text
+/bin/x86_64-linux-gnu-gprof
+/bin/x86_64-linux-gnu-gprofng
+/bin/x86_64-linux-gnu-ld
+/bin/x86_64-linux-gnu-ld.bfd
+/bin/x86_64-linux-gnu-ld.gold
+/bin/x86_64-linux-gnu-lto-dump
+/bin/x86_64-linux-gnu-lto-dump-12
+/bin/x86_64-linux-gnu-nm
+/bin/x86_64-linux-gnu-objcopy
+/bin/x86_64-linux-gnu-objdump
+/bin/x86_64-linux-gnu-ranlib
+/bin/x86_64-linux-gnu-readelf
+/bin/x86_64-linux-gnu-size
+/bin/x86_64-linux-gnu-strings
+/bin/x86_64-linux-gnu-strip
+/sbin/dumpe2fs
+/sbin/e2freefrag
+/sbin/e2fsck
+/sbin/e2image
+/sbin/e2label
+/sbin/e2mmpstatus
+/sbin/e2scrub
+/sbin/e2scrub_all
+/sbin/e2undo
+/sbin/e4crypt
+/sbin/e4defrag
+/sbin/fsck.ext2
+/sbin/fsck.ext3
+/sbin/fsck.ext4
+/sbin/killall5
+/sbin/mke2fs
+/sbin/mkfs.ext2
+/sbin/mkfs.ext3
+/sbin/mkfs.ext4
+/sbin/resize2fs
+/sbin/tune2fs
+/sbin/update-grub2
+
+
+14) Измените приглашение так, чтобы выводились имя хоста, имя пользователя и
+время: имя_пользователя@имя_хоста-HH:MM> (Используйте переменные
+bash и команду date)
+eltex-pg2-v15@eltex-2025-autumn:~$ PS1='\u@\h-\t> '
+
+15) eltex-pg2-v15@eltex-2025-autumn-14:25:30> export PS1
+
+16) eltex-pg2-v15@eltex-2025-autumn:~$ mkdir -p $(date +%Y)-{01,02,03,04,05,06,07,08,09,10,11,12}
+eltex-pg2-v15@eltex-2025-autumn:~$ ls
+2025-01  2025-04  2025-07  2025-10  eltex-pg2-v15_part.log  MyKeySSH.pub
+2025-02  2025-05  2025-08  2025-11  help                    practice2_eltex-pg2-v15_part1.log
+2025-03  2025-06  2025-09  2025-12  MyKeySSH                report_part1.txt
+eltex-pg2-v15@eltex-2025-autumn:~$
+
