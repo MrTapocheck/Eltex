@@ -2,7 +2,7 @@ eltex-pg2-v15@eltex-2025-autumn:~$ touch practice2_${USER}_part1.log
 
 1)Создайте на сервере для 1 практики ключ ssh при помощи программы ssh-keygen
 2)Скопируйте созданный ключ на сервер для 2 практики для пользователя root при помощи
-программы ssh-copy-id
+программы   ssh-copy-id
 3)Подключитесь к серверу для 2 практики под пользователем root и сравните содержимое файла
 открытого ключа на сервере 1 ~/.ssh/*.pub и файла ~/.ssh/authorized_keys на сервере для 2
 практики, а так же права доступа для каждого из файлов
@@ -33,6 +33,10 @@ ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDUn+YCuJMfIuyKkTSEQ+fncKEkJ8RTTpDWYf+UA3LC
 домашнего каталога и shell /bin/bash. Создайте пароль пользователю user1
 
 root@eltex-practice2-pg2-v15:~# sudo useradd -m -s /bin/bash user1
+root@eltex-practice2-pg2-v15:~# sudo passwd user1
+New password:
+Retype new password:
+passwd: password updated successfully
 
 5) Создайте пользователя user2 и user3 при помощи команды adduser
 root@eltex-practice2-pg2-v15:~# adduser user2
@@ -56,8 +60,6 @@ Enter the new value, or press ENTER for the default
 Is the information correct? [Y/n] info: Adding new user `user2' to supplemental / extra groups `users' ...
 info: Adding user `user2' to group `users' ...
 
-root@eltex-practice2-pg2-v15:~#
-
 root@eltex-practice2-pg2-v15:~# adduser user3
 info: Adding user `user3' ...
 info: Selecting UID/GID from range 1000 to 59999 ...
@@ -65,18 +67,6 @@ info: Adding new group `user3' (1003) ...
 info: Adding new user `user3' (1003) with group `user3 (1003)' ...
 info: Creating home directory `/home/user3' ...
 info: Copying files from `/etc/skel' ...
-New password:
-Retype new password:
-No password has been supplied.
-New password:
-Retype new password:
-No password has been supplied.
-New password:
-Retype new password:
-No password has been supplied.
-passwd: Authentication token manipulation error
-passwd: password unchanged
-Try again? [y/N] y
 New password:
 Retype new password:
 passwd: password updated successfully
@@ -89,15 +79,13 @@ Enter the new value, or press ENTER for the default
         Other []:
 
 Is the information correct? [Y/n] info: Adding new user `user3' to supplemental / extra groups `users' ...
-info: Adding user `user3' to group `users' ...
-
-root@eltex-practice2-pg2-v15:~#
+info: Adding user `user3' to group `users' ...\
 
 6)Для пользователя user3 смените shell на /usr/sbin/nologin (man usermod), выполните вход под
 этим пользователем при помощи утилиты su, сначала без дополнительных параметров, затем с
 явным указанием shell /bin/bash в параметрах su. Выполните logout
 
-root@eltex-practice2-pg2-v15:~# sudo usermod -s /usr/sbin/nologin user3
+root@eltex-practice2-pg2-v15:~# usermod -s /usr/sbin/nologin user3
 root@eltex-practice2-pg2-v15:~# su user3
 This account is currently not available.
 root@eltex-practice2-pg2-v15:~#
@@ -107,7 +95,6 @@ user3@eltex-practice2-pg2-v15:/root$ logout
 bash: logout: not login shell: use `exit'
 user3@eltex-practice2-pg2-v15:/root$ exit
 exit
-root@eltex-practice2-pg2-v15:~#
 
 7)Создайте новую группу и добавьте её для всех пользователей user* как дополнительную,
 посмотрите список групп всех пользователей user*
@@ -122,7 +109,6 @@ root@eltex-practice2-pg2-v15:~# groups user2
 user2 : user2 users user_group
 root@eltex-practice2-pg2-v15:~# groups user3
 user3 : user3 users user_group
-root@eltex-practice2-pg2-v15:~#
 
 8)
 9)Создайте каталог /opt/share и назначьте группу из предыдущего пункта его владельцем,
