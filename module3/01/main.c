@@ -7,393 +7,232 @@
 #include <sys/wait.h>
 #include <errno.h>
 
-#define BLOCK_SIZE          1024 
-#define MAX_FILENAME        256   
-#define PIPE_NAME_MAX       256
-#define READY_MSG_LEN       5
-
-enum exit_code {
-    EXIT_OK          = 0,
-    EXIT_ERR_USAGE   = 1,
-    EXIT_ERR_PIPE    = 2,
-    EXIT_ERR_FORK    = 3,
-    EXIT_ERR_MEMORY  = 4,
-    EXIT_ERR_FIFO    = 5,
-    EXIT_ERR_OPEN    = 6,
-    EXIT_ERR_IO      = 7
-};
-
-enum pipe_type {
-    PIPE_UNNAMED = 0,  // Неименованный канал (pipe)
-    PIPE_NAMED = 1     // Именованный канал (FIFO)
-};
+#define BUF_SIZE 4096
+#define NAME_SIZE 256
 
 typedef struct {
-    enum pipe_type pipe_type;
-    char pipe_name[PIPE_NAME_MAX];
-    int file_count;
-    char **files;
-} ProgramParams;
+    char name[NAME_SIZE];
+    long size;
+} FileInfo;
 
-static int parse_args(int argc, char *argv[], ProgramParams *params);
-static int create_pipes(ProgramParams *params, int data_pipe[2], int ready_pipe[2]);
-static ssize_t write_all(int fd, const void *buf, size_t count);
-static ssize_t read_all(int fd, void *buf, size_t count);
-static void parent_process(ProgramParams *params, int data_pipe[2], int ready_pipe[2]);
-static void child_process(ProgramParams *params, int data_pipe[2], int ready_pipe[2]);
-static void cleanup(ProgramParams *params, int data_pipe[2], int ready_pipe[2]);
-
-int main(int argc, char *argv[])
+int read_all(int fd, void *buf, size_t n)
 {
-	ProgramParams params = {0};
-	int data_pipe[2] = {-1, -1};
-	int ready_pipe[2] = {-1, -1};
-	pid_t pid;
-	int ret;
+    size_t done = 0;
 
-	ret = parse_args(argc, argv, &params);
-	if (ret != EXIT_OK)
-		return ret;
+    while (done < n) {
+        ssize_t r = read(fd, (char *)buf + done, n - done);
 
-	ret = create_pipes(&params, data_pipe, ready_pipe);
-	if (ret != EXIT_OK)
-		return ret;
+        if (r == 0)
+            return 0;
+        if (r < 0) {
+            if (errno == EINTR)
+                continue;
+            return -1;
+        }
 
-	pid = fork();
-	if (pid < 0) {
-		perror("fork");
-		cleanup(&params, data_pipe, ready_pipe);
-		return EXIT_ERR_FORK;
-	}
+        done += r;
+    }
 
-	if (pid == 0) {
-		child_process(&params, data_pipe, ready_pipe);
-		_exit(EXIT_OK);
-	}
-
-	parent_process(&params, data_pipe, ready_pipe);
-
-	wait(NULL);
-
-	cleanup(&params, data_pipe, ready_pipe);
-	return EXIT_OK;
+    return 1;
 }
 
-static int parse_args(int argc, char *argv[], ProgramParams *params)
+int write_all(int fd, const void *buf, size_t n)
 {
-	int i, file_idx;
+    size_t done = 0;
 
-	params->pipe_type = PIPE_UNNAMED;
-	params->pipe_name[0] = '\0';
-	params->file_count = 0;
-	params->files = NULL;
+    while (done < n) {
+        ssize_t w = write(fd, (const char *)buf + done, n - done);
 
-	for (i = 1; i < argc; i++) {
-		if (strcmp(argv[i], "-p") == 0) {
-			if (i + 1 >= argc) {
-				fprintf(stderr, "Ошибка: после -p нужно указать имя канала\n");
-				return EXIT_ERR_USAGE;
-			}
-			params->pipe_type = PIPE_NAMED;
-			strncpy(params->pipe_name, argv[i + 1], PIPE_NAME_MAX - 1);
-			params->pipe_name[PIPE_NAME_MAX - 1] = '\0';
-			i++;
-		} else {
-			params->file_count++;
-		}
-	}
+        if (w < 0) {
+            if (errno == EINTR)
+                continue;
+            return -1;
+        }
 
-	if (params->file_count == 0) {
-		fprintf(stderr, "Использование: %s [-p pipe_name] файл1 [файл2 ...]\n",
-			argv[0]);
-		return EXIT_ERR_USAGE;
-	}
+        done += w;
+    }
 
-	params->files = malloc((size_t)params->file_count * sizeof(char *));
-	if (!params->files) {
-		perror("malloc");
-		return EXIT_ERR_MEMORY;
-	}
-
-	file_idx = 0;
-	for (i = 1; i < argc; i++) {
-		if (strcmp(argv[i], "-p") == 0) {
-			i++;
-			continue;
-		}
-		params->files[file_idx++] = argv[i];
-	}
-
-	return EXIT_OK;
+    return 0;
 }
 
-static int create_pipes(ProgramParams *params, int data_pipe[2], int ready_pipe[2])
+int main(int argc, char **argv)
 {
-	if (pipe(ready_pipe) == -1) {
-		perror("pipe ready");
-		return EXIT_ERR_PIPE;
-	}
+    int named = 0, files_count = 0;
+    char pipe_name[NAME_SIZE] = "";
+    char **files = malloc(argc * sizeof(char *));
 
-	if (params->pipe_type == PIPE_UNNAMED) {
-		if (pipe(data_pipe) == -1) {
-			perror("pipe data");
-			close(ready_pipe[0]);
-			close(ready_pipe[1]);
-			return EXIT_ERR_PIPE;
-		}
-	} else {
-		if (mkfifo(params->pipe_name, 0666) == -1 && errno != EEXIST) {
-			perror("mkfifo");
-			close(ready_pipe[0]);
-			close(ready_pipe[1]);
-			return EXIT_ERR_FIFO;
-		}
+    for (int i = 1; i < argc; i++) {
+        if (!strcmp(argv[i], "-p")) {
+            if (++i == argc) {
+                fprintf(stderr, "После -p нужно имя канала\n");
+                return 1;
+            }
+            named = 1;
+            strcpy(pipe_name, argv[i]);
+        } else {
+            files[files_count++] = argv[i];
+        }
+    }
 
-		data_pipe[0] = -1;
-		data_pipe[1] = -1;
-	}
+    if (!files_count) {
+        fprintf(stderr, "Укажите хотя бы один файл\n");
+        return 1;
+    }
 
-	return EXIT_OK;
-}
+    int ready[2], data[2] = {-1, -1};
 
-static ssize_t write_all(int fd, const void *buf, size_t count)
-{
-	const char *p = buf;
-	size_t left = count;
+    if (pipe(ready) == -1) {
+        perror("pipe");
+        return 1;
+    }
 
-	while (left > 0) {
-		ssize_t n = write(fd, p, left);
-		if (n < 0) {
-			if (errno == EINTR)
-				continue;
-			return -1;
-		}
-		if (n == 0)
-			return -1;
+    if (named) {
+        if (mkfifo(pipe_name, 0666) == -1 && errno != EEXIST) {
+            perror("mkfifo");
+            return 1;
+        }
+    } else if (pipe(data) == -1) {
+        perror("pipe");
+        return 1;
+    }
 
-		p += (size_t)n;
-		left -= (size_t)n;
-	}
-	return (ssize_t)count;
-}
+    pid_t pid = fork();
 
-static ssize_t read_all(int fd, void *buf, size_t count)
-{
-	char *p = buf;
-	size_t left = count;
+    if (pid == -1) {
+        perror("fork");
+        return 1;
+    }
 
-	while (left > 0) {
-		ssize_t n = read(fd, p, left);
-		if (n < 0) {
-			if (errno == EINTR)
-				continue;
-			return -1;
-		}
-		if (n == 0)
-			return (ssize_t)(count - left);
+    //ребёнок
+    if (pid == 0) {
+        int in;
 
-		p += (size_t)n;
-		left -= (size_t)n;
-	}
-	return (ssize_t)count;
-}
+        close(ready[0]);
 
-static void cleanup(ProgramParams *params, int data_pipe[2], int ready_pipe[2])
-{
-	if (data_pipe[0] != -1)
-		close(data_pipe[0]);
-	if (data_pipe[1] != -1)
-		close(data_pipe[1]);
+        if (named) {
+            in = open(pipe_name, O_RDONLY);
+            if (in == -1) {
+                perror("open fifo");
+                exit(1);
+            }
+        } else {
+            close(data[1]);
+            in = data[0];
+        }
 
-	if (ready_pipe[0] != -1)
-		close(ready_pipe[0]);
-	if (ready_pipe[1] != -1)
-		close(ready_pipe[1]);
+        char ready_byte = 1;
+        write_all(ready[1], &ready_byte, 1);
+        close(ready[1]);
 
-	if (params->pipe_type == PIPE_NAMED && params->pipe_name[0] != '\0')
-		unlink(params->pipe_name);
+        while (1) {
+            FileInfo info;
+            char buf[BUF_SIZE];
 
-	free(params->files);
-	params->files = NULL;
-}
+            if (read_all(in, &info, sizeof(info)) != 1)
+                break;
 
-static void child_process(ProgramParams *params, int data_pipe[2], int ready_pipe[2])
-{
-	int data_rd = -1;
-	int ready_wr = ready_pipe[1];
+            if (info.size < 0)
+                break;
 
-	close(ready_pipe[0]);
+            char copy[NAME_SIZE + 6];
+            snprintf(copy, sizeof(copy), "%s.copy", info.name);
 
-	if (params->pipe_type == PIPE_UNNAMED) {
-		close(data_pipe[1]);
-		data_rd = data_pipe[0];
-	}
+            int out = open(copy, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 
-	for (;;) {
-		char header[MAX_FILENAME + 64];
-		char copy_name[sizeof(header) + 16];
-		char buf[BLOCK_SIZE];
-		char *colon;
-		long size, left;
-		int out_fd;
-		ssize_t n;
-		size_t i;
+            long left = info.size;
 
-		if (write_all(ready_wr, "READY", READY_MSG_LEN) != READY_MSG_LEN)
-			break;
+            while (left > 0) {
+                size_t n = left < BUF_SIZE ? left : BUF_SIZE;
 
-		if (params->pipe_type == PIPE_NAMED) {
-			data_rd = open(params->pipe_name, O_RDONLY);
-			if (data_rd < 0) {
-				perror("child open fifo");
-				break;
-			}
-		}
+                ssize_t r = read(in, buf, n);
 
-		i = 0;
-		while (i < sizeof(header) - 1) {
-			n = read(data_rd, &header[i], 1);
-			if (n <= 0)
-				goto done;
-			if (header[i] == '\0')
-				break;
-			i++;
-		}
-		header[i] = '\0';
+                if (r == 0)
+                    break;
 
-		if (strcmp(header, "END") == 0)
-			break;
+                if (r < 0) {
+                    if (errno == EINTR)
+                        continue;
+                    break;
+                }
 
-		colon = strchr(header, ':');
-		if (!colon)
-			goto close_data;
+                if (out != -1)
+                    write_all(out, buf, r);
 
-		*colon = '\0';
-		size = atol(colon + 1);
-		if (size < 0)
-			size = 0;
+                left -= r;
+            }
 
-		snprintf(copy_name, sizeof(copy_name), "%s.copy", header);
+            if (out != -1)
+                close(out);
+        }
 
-		out_fd = open(copy_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		if (out_fd < 0) {
-			perror("child create copy");
-			left = size;
-			while (left > 0) {
-				n = read(data_rd, buf, (size_t)(left > BLOCK_SIZE ? BLOCK_SIZE : left));
-				if (n <= 0)
-					break;
-				left -= n;
-			}
-			goto close_data;
-		}
+        close(in);
+        exit(0);
+    }
 
-		left = size;
-		while (left > 0) {
-			n = read(data_rd, buf, (size_t)(left > BLOCK_SIZE ? BLOCK_SIZE : left));
-			if (n <= 0)
-				break;
-			if (write_all(out_fd, buf, (size_t)n) != n)
-				break;
-			left -= n;
-		}
+    close(ready[1]);
 
-		close(out_fd);
+    int out;
 
-close_data:
-		if (params->pipe_type == PIPE_NAMED && data_rd >= 0) {
-			close(data_rd);
-			data_rd = -1;
-		}
-	}
+    if (named) {
+        out = open(pipe_name, O_WRONLY);
+        if (out == -1) {
+            perror("open fifo");
+            return 1;
+        }
+    } else {
+        close(data[0]);
+        out = data[1];
+    }
 
-done:
-	if (data_rd >= 0)
-		close(data_rd);
-	close(ready_wr);
-}
+    char ready_byte;
 
-static void parent_process(ProgramParams *params, int data_pipe[2], int ready_pipe[2])
-{
-	int data_wr = -1;
-	int ready_rd = ready_pipe[0];
-	int i;
+    if (read_all(ready[0], &ready_byte, 1) != 1) {
+        fprintf(stderr, "Ребёнок не готов\n");
+        return 1;
+    }
 
-	close(ready_pipe[1]);
+    close(ready[0]);
 
-	if (params->pipe_type == PIPE_UNNAMED) {
-		close(data_pipe[0]);
-		data_wr = data_pipe[1];
-	}
+    for (int i = 0; i < files_count; i++) {
+        FileInfo info = {0};
 
-	for (i = 0; i < params->file_count; i++) {
-		char ready[READY_MSG_LEN + 1];
-		char header[MAX_FILENAME + 64];
-		char buf[BLOCK_SIZE];
-		int fd;
-		off_t size;
-		ssize_t n;
+        strncpy(info.name, files[i], NAME_SIZE - 1);
 
-		if (read_all(ready_rd, ready, READY_MSG_LEN) != READY_MSG_LEN)
-			break;
-		ready[READY_MSG_LEN] = '\0';
-		if (strcmp(ready, "READY") != 0)
-			break;
+        int fd = open(files[i], O_RDONLY);
 
-		if (params->pipe_type == PIPE_NAMED) {
+        if (fd == -1) {
+            fprintf(stderr, "Файл '%s' не существует\n", files[i]);
+            info.size = 0;
+            write_all(out, &info, sizeof(info));
+            continue;
+        }
 
-            data_wr = open(params->pipe_name, O_WRONLY);
-			if (data_wr < 0) {
-				perror("parent open fifo");
-				break;
-			}
-		}
+        info.size = lseek(fd, 0, SEEK_END);
+        lseek(fd, 0, SEEK_SET);
 
-		fd = open(params->files[i], O_RDONLY);
-		if (fd < 0) {
-			fprintf(stderr, "Файл '%s' не существует\n", params->files[i]);
-			snprintf(header, sizeof(header), "%s:0", params->files[i]);
-			write_all(data_wr, header, strlen(header) + 1);
-			goto next;
-		}
+        write_all(out, &info, sizeof(info));
 
-		size = lseek(fd, 0, SEEK_END);
-		lseek(fd, 0, SEEK_SET);
-		if (size < 0)
-			size = 0;
+        char buf[BUF_SIZE];
+        ssize_t n;
 
-		snprintf(header, sizeof(header), "%s:%ld", params->files[i], (long)size);
-		if (write_all(data_wr, header, strlen(header) + 1) < 0) {
-			close(fd);
-			break;
-		}
+        while ((n = read(fd, buf, sizeof(buf))) > 0)
+            write_all(out, buf, n);
 
-		while ((n = read(fd, buf, BLOCK_SIZE)) > 0) {
-			if (write_all(data_wr, buf, (size_t)n) != n)
-				break;
-		}
+        close(fd);
+    }
 
-		close(fd);
+    FileInfo end = {0};
+    end.size = -1;
+    write_all(out, &end, sizeof(end));
 
-next:
-		if (params->pipe_type == PIPE_NAMED && data_wr >= 0) {
-			close(data_wr);
-			data_wr = -1;
-		}
-	}
+    close(out);
 
-	{
-		char ready[READY_MSG_LEN + 1];
-		if (read_all(ready_rd, ready, READY_MSG_LEN) == READY_MSG_LEN) {
-			if (params->pipe_type == PIPE_NAMED)
-				data_wr = open(params->pipe_name, O_WRONLY);
+    waitpid(pid, NULL, 0);
 
-			if (data_wr >= 0)
-				write_all(data_wr, "END", 4);
-		}
-	}
+    if (named)
+        unlink(pipe_name);
 
-	if (data_wr >= 0)
-		close(data_wr);
-	close(ready_rd);
+    free(files);
+
+    return 0;
 }
