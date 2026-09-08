@@ -110,7 +110,7 @@ int main(int argc, char *argv[]) {
 
     //сообщение о подключении
     char join_msg[MAX_MSG];
-    snprintf(join_msg, sizeof(join_msg), "%s: joined the chat", username);
+    snprintf(join_msg, sizeof(join_msg), "%s: присоединился к чату", username);
     sendto(sockfd, join_msg, strlen(join_msg), 0,
            (struct sockaddr *)&bcast_addr, sizeof(bcast_addr));
 
@@ -140,7 +140,7 @@ int main(int argc, char *argv[]) {
 
     // сообщение об отключении
     char leave_msg[MAX_MSG];
-    snprintf(leave_msg, sizeof(leave_msg), "%s: left the chat", username);
+    snprintf(leave_msg, sizeof(leave_msg), "%s: покинул чат", username);
     sendto(sockfd, leave_msg, strlen(leave_msg), 0,
            (struct sockaddr *)&bcast_addr, sizeof(bcast_addr));
 
